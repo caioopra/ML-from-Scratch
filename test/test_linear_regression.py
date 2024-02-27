@@ -1,3 +1,6 @@
+import pytest
+import math
+
 from src.Value import Value
 from src.models import LinearRegression
 
@@ -18,29 +21,32 @@ def create_data(WEIGHT, BIAS) -> tuple[list, list, list, list]:
     return X_train, y_train, X_test, y_test
 
 
-def linear_regression_test_1():
+def test_linear_regression():
     lr = LinearRegression()
 
     WEIGHT = 0.7
     BIAS = 0.3
-    
+
     LR = 0.01
-    EPOCHS = 3000
+    EPOCHS = 1000
 
     X_train, y_train, X_test, y_test = create_data(WEIGHT, BIAS)
-    
+
     for k in range(EPOCHS):
         y_pred = [lr([x]) for x in X_train]
-        loss = sum(((yout - ygt)**2 for ygt, yout in zip(y_train, y_pred)), Value(0.0))
-        
+        loss = sum(
+            ((yout - ygt) ** 2 for ygt, yout in zip(y_train, y_pred)), Value(0.0)
+        )
+
         for p in lr.parameters():
             p.grad = 0
-        
+
         loss.backward()
-        
+
         for p in lr.parameters():
             p.data += -LR * p.grad
-            
+
     print(lr.parameters())
 
-linear_regression_test_1()
+    assert math.isclose(lr.parameters()[0].data, WEIGHT) == True
+    assert math.isclose(lr.parameters()[1].data, BIAS) == True
