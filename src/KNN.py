@@ -39,8 +39,8 @@ class KNeighborsClassifier:
         """
         y_pred = self.predict(X_test)
 
-        acc = sum(
-            filter(lambda y_true, y_pred: y_true == y_pred, zip(y_test, y_pred))
-        ) / len(y_test)
+        acc = sum(y_true == y_pred for y_true, y_pred in zip(y_test, y_pred)) / len(
+            y_test
+        )
 
         return acc
