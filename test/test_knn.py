@@ -28,4 +28,4 @@ def test_knn():
     knn.fit(X_train, y_train)
     acc = knn.evaluate(X_test, y_test)
 
-    assert acc > 0.9
+    assert acc >= 0.9

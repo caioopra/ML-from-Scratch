@@ -20,8 +20,8 @@ class Value:
         out = Value(self.data + other.data, (self, other), "+")
 
         def _backward():
-            self.grad += out.grad
-            other.grad += out.grad
+            self.grad += 1.0 * out.grad
+            other.grad += 1.0 * out.grad
 
         out._backward = _backward
         return out
@@ -55,22 +55,21 @@ class Value:
         return self + (-other)
 
     def backward(self):
-        topo = self._build_topological_order(self, topo=[], visited=set())
+        topo = []
+        visited = set()
 
-        self.grad = 1
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build_topo(child)
+            topo.append(v)
+
+        build_topo(self)
+
+        self.grad = 1.0
         for node in reversed(topo):
             node._backward()
-
-    def _build_topological_order(
-        self, node: Value, topo: list[Value], visited: set[Value]
-    ):
-        if node not in visited:
-            visited.add(node)
-            for child in node._prev:
-                self._build_topological_order(child, topo, visited)
-            topo.append(node)
-
-        return topo
 
     def __radd__(self, other: int | float | Value) -> Value:
         return self + other
