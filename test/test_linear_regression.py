@@ -4,6 +4,8 @@ import math
 from src.Value import Value
 from src.models import LinearRegression
 
+from src.metrics import sse, mse, rmse
+
 
 def create_data(WEIGHT, BIAS) -> tuple[list, list, list, list]:
     start = 0
@@ -34,9 +36,7 @@ def test_linear_regression():
 
     for k in range(EPOCHS):
         y_pred = [lr([x]) for x in X_train]
-        loss = sum(
-            ((yout - ygt) ** 2 for ygt, yout in zip(y_train, y_pred)), Value(0.0)
-        )
+        loss = sse(y_train, y_pred)
 
         for p in lr.parameters():
             p.grad = 0
