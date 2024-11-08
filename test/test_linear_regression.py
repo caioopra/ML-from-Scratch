@@ -46,7 +46,7 @@ def test_linear_regression():
         for p in lr.parameters():
             p.data += -LR * p.grad
 
-    print(lr.parameters())
+    print("Linear regression parameters: ", lr.parameters())
 
-    assert math.isclose(lr.parameters()[0].data, WEIGHT) == True
-    assert math.isclose(lr.parameters()[1].data, BIAS) == True
+    assert math.isclose(lr.parameters()[0].data, WEIGHT)
+    assert math.isclose(lr.parameters()[1].data, BIAS)

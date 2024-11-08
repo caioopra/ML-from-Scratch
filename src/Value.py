@@ -5,7 +5,7 @@ class Value:
     """Stores a single value and it's gradient"""
 
     def __init__(
-        self, data: int | float, _children: tuple[str] = (), _operation: str = ""
+        self, data: int | float, _children: tuple[str] | tuple[()] = (), _operation: str = ""
     ):
         self.data = data
         self.grad = 0
